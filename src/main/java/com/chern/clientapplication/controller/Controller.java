@@ -10,9 +10,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
-public class Controller {
+public abstract  class Controller {
 
-    protected final static String SERVER_URL = "http://localhost:8080/";
+    protected final static String SERVER_URL = "http://localhost:8083/";
     protected final static String TITLE = "Новое окно";
 
     @Autowired
@@ -20,7 +20,7 @@ public class Controller {
     @Autowired
     protected RestTemplate restClient;
 
-    private Stage primaryStage;
+    public static Stage primaryStage;
 
     public void showCurrentStageWindow(Class<? extends Controller> controllerClass, String title) {
         showStage(controllerClass, title, primaryStage);

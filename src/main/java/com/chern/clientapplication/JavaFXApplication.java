@@ -1,5 +1,6 @@
 package com.chern.clientapplication;
 
+import com.chern.clientapplication.controller.Controller;
 import com.chern.clientapplication.controller.LoginController;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -30,6 +31,8 @@ public class JavaFXApplication extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+        Controller.primaryStage = stage;
+//        applicationContext.getBean(LoginController.class).setStage(stage);
     }
 
     @Override

@@ -1,31 +1,56 @@
 package com.chern.clientapplication.controller;
 
+import com.chern.clientapplication.model.Role;
+import com.chern.clientapplication.model.User;
+import com.chern.clientapplication.model.UserStatus;
+import com.chern.clientapplication.utils.AlertService;
+import com.chern.clientapplication.utils.ValidationService;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import net.rgielen.fxweaver.core.FxControllerAndView;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import lombok.RequiredArgsConstructor;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 @FxmlView("login.fxml")
+@RequiredArgsConstructor
 public class LoginController extends Controller{
 
-//    private final FxControllerAndView<SomeDialog, VBox> someDialog;
-//
-//    @FXML
-//    public Button openDialogButton;
-//
-//
-//    public LoginController(FxControllerAndView<SomeDialog, VBox> someDialog) {
-//        this.someDialog = someDialog;
-//    }
-//
-//    @FXML
-//    public void initialize() {
-//        openDialogButton.setOnAction(
-//                actionEvent -> someDialog.getController().show()
-//        );
-//    }
+    protected final static String TITLE = "Вход";
 
+    @FXML
+    private PasswordField textFieldPassword;
+    @FXML
+    private TextField textFieldLogin;
+
+    private final ValidationService validationService;
+    private final AlertService alertService;
+
+    public void login() {
+        String login = textFieldLogin.getText();
+        String password = textFieldPassword.getText();
+
+        if (!validationService.validateEmptyLines(login, password)) {
+            alertService.showAlert(AlertService.AlertType.PASSWORD_OR_LOGIN_IS_EMPTY);
+        } else {
+            User user = new User(login, password, Role.USER);
+            HttpEntity<User> requestBody = new HttpEntity<>(user);
+//            HttpEntity<User> requestBody = new HttpEntity<>(user, getJsonHttpHeaders());
+            UserStatus result = restClient.postForObject(SERVER_URL + "/login", requestBody, UserStatus.class);
+
+            if (UserStatus.UNKNOWER.equals(result)) {
+                alertService.showAlert(AlertService.AlertType.USER_NOT_FOUND);
+            } else if (UserStatus.CREATED_ADMIN.equals(result)) {
+                showCurrentStageWindow (AdminPageController.class, AdminPageController.TITLE);
+            } else if (UserStatus.CREATED_USER.equals(result)) {
+                showCurrentStageWindow (UserPageController.class, UserPageController.TITLE);
+            }
+        }
+    }
+
+    public void registration() {
+        showCurrentStageWindow(RegistrationController.class, RegistrationController.TITLE);
+    }
 }
