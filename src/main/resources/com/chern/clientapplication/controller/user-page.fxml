@@ -1,14 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.chern.clientapplication.controller.UserPageController"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane prefHeight="451.0" prefWidth="886.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chern.clientapplication.controller.UserPageController">
+   <children>
+      <VBox prefHeight="451.0" prefWidth="233.0" style="-fx-background-color: gray;">
+         <children>
+            <Pane prefHeight="97.0" prefWidth="234.0" style="-fx-border-color: white;">
+               <children>
+                  <Text fill="WHITE" layoutX="14.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ElectroStoreManagement" wrappingWidth="129.39532470703125">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+            <Button fx:id="buttonSwitchToStoragePane" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchToStoragePane" prefHeight="55.0" prefWidth="297.0" style="-fx-background-color: none; -fx-border-color: white;" text="Склад товаров" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Button>
+            <Button fx:id="buttonSwitchToSuppliersPane" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchToSuppliersPane" prefHeight="55.0" prefWidth="297.0" style="-fx-background-color: none; -fx-border-color: white;" text="Поставщики" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Button>
+            <Button fx:id="buttonSwitchToSalesPane" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchToSalesPane" prefHeight="55.0" prefWidth="297.0" style="-fx-background-color: none; -fx-border-color: white;" text="Продажи" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Button>
+            <Button fx:id="buttonSwitchToAdminPane" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#switchToAdminPane" prefHeight="55.0" prefWidth="297.0" style="-fx-background-color: none; -fx-border-color: white;" text="Для администратора" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+            </Button>
+            <Pane prefHeight="138.0" prefWidth="234.0" style="-fx-border-color: white;" />
+         </children>
+      </VBox>
+      <StackPane fx:id="paneContainer" layoutX="234.0" prefHeight="451.0" prefWidth="656.0">
+         <children>
+            <Pane fx:id="paneSuppliers" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Button mnemonicParsing="false" text="2" />
+               </children>
+            </Pane>
+            <Pane fx:id="paneStorage" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #8d9cb5;">
+               <children>
+                  <AnchorPane layoutY="50.0" prefHeight="326.0" prefWidth="656.0">
+                     <children>
+                        <TableView fx:id="tableProducts" layoutX="11.0" prefHeight="326.0" prefWidth="634.0" style="-fx-background-color: gray; -fx-border-color: white; -fx-background-radius: 5; -fx-border-radius: 5;">
+                          <columns>
+                            <TableColumn fx:id="columnName" prefWidth="118.40000915527344" text="Название" />
+                            <TableColumn fx:id="columnModel" prefWidth="124.0" text="Модель" />
+                              <TableColumn fx:id="columnSupplier" prefWidth="135.199951171875" text="Поставщик" />
+                              <TableColumn fx:id="columnUnitCost" prefWidth="130.39996337890625" text="Цена/ед" />
+                              <TableColumn fx:id="columnAmount" prefWidth="127.2000732421875" text="Количество" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+                  <Button fx:id="buttonEdit" layoutX="10.0" layoutY="384.0" mnemonicParsing="false" onAction="#edit" prefHeight="53.0" prefWidth="157.0" style="-fx-background-color: #5e7fb8; -fx-background-radius: 5;" text="Редактировать">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Button>
+                  <TextField fx:id="textFieldSearch" layoutX="10.0" layoutY="8.0" prefHeight="34.0" prefWidth="538.0" promptText="Введите название искомого предмета" style="-fx-background-color: gray; -fx-border-color: white; -fx-border-radius: 10; -fx-background-radius: 10;">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </TextField>
+                  <Button fx:id="buttonDelete" layoutX="316.0" layoutY="384.0" mnemonicParsing="false" onAction="#delete" prefHeight="53.0" prefWidth="157.0" style="-fx-background-color: #cf0c1d; -fx-background-radius: 5;" text="Удалить">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="buttonAdd" layoutX="489.0" layoutY="384.0" mnemonicParsing="false" onAction="#add" prefHeight="53.0" prefWidth="157.0" style="-fx-background-color: #12b332; -fx-background-radius: 5;" text="Добавить">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="buttonSearch" layoutX="558.0" layoutY="8.0" mnemonicParsing="false" onAction="#search" prefHeight="34.0" prefWidth="83.0" style="-fx-background-color: #5e7fb8; -fx-background-radius: 5;" text="Поиск">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+         </children>
+      </StackPane>
+   </children>
 </AnchorPane>

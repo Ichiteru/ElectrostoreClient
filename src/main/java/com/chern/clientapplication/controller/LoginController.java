@@ -39,12 +39,9 @@ public class LoginController extends Controller{
             HttpEntity<User> requestBody = new HttpEntity<>(user);
 //            HttpEntity<User> requestBody = new HttpEntity<>(user, getJsonHttpHeaders());
             UserStatus result = restClient.postForObject(SERVER_URL + "/login", requestBody, UserStatus.class);
-
             if (UserStatus.UNKNOWER.equals(result)) {
                 alertService.showAlert(AlertService.AlertType.USER_NOT_FOUND);
-            } else if (UserStatus.CREATED_ADMIN.equals(result)) {
-                showCurrentStageWindow (AdminPageController.class, AdminPageController.TITLE);
-            } else if (UserStatus.CREATED_USER.equals(result)) {
+            } else {
                 showCurrentStageWindow (UserPageController.class, UserPageController.TITLE);
             }
         }
