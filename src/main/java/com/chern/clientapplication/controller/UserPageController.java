@@ -57,20 +57,31 @@ public class UserPageController extends Controller {
     }
 
     public void switchToSalesPane() {
+
     }
 
     public void switchToAdminPane() {
+
     }
 
     public void edit() {
+        productRepo.setSelectedItemId(tableProducts.getSelectionModel().getSelectedItem().getId());
+        showNewStageWindow(EditProductController.class);
     }
 
     public void delete() {
     }
 
     public void add() {
+        showNewStageWindow(AddProductController.class);
     }
 
     public void search() {
+
+    }
+
+    public void update() {
+        productRepo.init();
+        tableProducts.setItems(productRepo.getProductData());
     }
 }

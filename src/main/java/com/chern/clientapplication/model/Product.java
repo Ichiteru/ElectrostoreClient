@@ -21,4 +21,11 @@ public class Product {
     @JsonProperty("productName")
     private ProductName productName;
 
+    public Product(Integer amount, Double unitCost, String model, Supplier supplier, ProductName productName) {
+        this.amount = amount;
+        this.unitCost = unitCost;
+        this.model = model;
+        this.supplier = supplier;
+        this.productName = productName;
+    }
 }

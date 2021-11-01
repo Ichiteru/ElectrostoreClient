@@ -16,6 +16,15 @@ public class ProductRepo extends Controller {
 
     private ObservableList<Product> productDataProd = FXCollections.observableArrayList();
     private ResponseEntity<List<Product>> productData;
+    private static Long selectedItemId;
+
+    public Long getSelectedItemId() {
+        return selectedItemId;
+    }
+
+    public void setSelectedItemId(Long selectedItemId) {
+        this.selectedItemId = selectedItemId;
+    }
 
     public ObservableList<Product> getProductData() {
         return productDataProd;

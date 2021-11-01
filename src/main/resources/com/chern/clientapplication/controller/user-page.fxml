@@ -11,7 +11,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane prefHeight="451.0" prefWidth="886.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chern.clientapplication.controller.UserPageController">
    <children>
       <VBox prefHeight="451.0" prefWidth="233.0" style="-fx-background-color: gray;">
@@ -70,7 +69,7 @@
                         </TableView>
                      </children>
                   </AnchorPane>
-                  <Button fx:id="buttonEdit" layoutX="10.0" layoutY="384.0" mnemonicParsing="false" onAction="#edit" prefHeight="53.0" prefWidth="157.0" style="-fx-background-color: #5e7fb8; -fx-background-radius: 5;" text="Редактировать">
+                  <Button fx:id="buttonEdit" layoutX="14.0" layoutY="384.0" mnemonicParsing="false" onAction="#edit" prefHeight="53.0" prefWidth="140.0" style="-fx-background-color: #5e7fb8; -fx-background-radius: 5;" text="Редактировать">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -80,12 +79,12 @@
                         <Font size="15.0" />
                      </font>
                   </TextField>
-                  <Button fx:id="buttonDelete" layoutX="316.0" layoutY="384.0" mnemonicParsing="false" onAction="#delete" prefHeight="53.0" prefWidth="157.0" style="-fx-background-color: #cf0c1d; -fx-background-radius: 5;" text="Удалить">
+                  <Button fx:id="buttonDelete" layoutX="344.0" layoutY="384.0" mnemonicParsing="false" onAction="#delete" prefHeight="53.0" prefWidth="140.0" style="-fx-background-color: #cf0c1d; -fx-background-radius: 5;" text="Удалить">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Button>
-                  <Button fx:id="buttonAdd" layoutX="489.0" layoutY="384.0" mnemonicParsing="false" onAction="#add" prefHeight="53.0" prefWidth="157.0" style="-fx-background-color: #12b332; -fx-background-radius: 5;" text="Добавить">
+                  <Button fx:id="buttonAdd" layoutX="506.0" layoutY="384.0" mnemonicParsing="false" onAction="#add" prefHeight="53.0" prefWidth="140.0" style="-fx-background-color: #12b332; -fx-background-radius: 5;" text="Добавить">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -93,6 +92,11 @@
                   <Button fx:id="buttonSearch" layoutX="558.0" layoutY="8.0" mnemonicParsing="false" onAction="#search" prefHeight="34.0" prefWidth="83.0" style="-fx-background-color: #5e7fb8; -fx-background-radius: 5;" text="Поиск">
                      <font>
                         <Font size="15.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="buttonUpdate" layoutX="177.0" layoutY="384.0" mnemonicParsing="false" onAction="#update" prefHeight="53.0" prefWidth="140.0" style="-fx-background-color: #e89f17; -fx-background-radius: 5;" text="Обновить">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
                      </font>
                   </Button>
                </children>
