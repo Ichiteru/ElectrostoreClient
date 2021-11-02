@@ -12,4 +12,8 @@ public class Supplier {
     private Long id;
     @JsonProperty("name")
     private String name;
+
+    public Supplier(String name) {
+        this.name = name;
+    }
 }
