@@ -9,6 +9,8 @@ import com.chern.clientapplication.repository.SupplierRepo;
 import com.chern.clientapplication.utils.AlertService;
 import com.chern.clientapplication.utils.EmptyFieldValidationService;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -33,6 +35,8 @@ import java.util.Map;
 @FxmlView("user-page.fxml")
 public class UserPageController extends Controller {
 
+    @FXML
+    private TextField textFieldSearch;
     @FXML
     private TableView<Supplier> tableSupplier;
     @FXML
@@ -75,18 +79,53 @@ public class UserPageController extends Controller {
         productRepo.init();
         productNameRepo.init();
         supplierRepo.init();
-        tableProducts.setItems(productRepo.getProductData());
+        FilteredList<Product> filteredData = getProductFilteredList(productRepo.getProductData(), textFieldSearch);
+        tableProducts.setItems(filteredData);
         columnName.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getProductName().getName()));
         columnModel.setCellValueFactory(new PropertyValueFactory<Product, String>("model"));
         columnSupplier.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getSupplier().getName()));
         columnUnitCost.setCellValueFactory(new PropertyValueFactory<Product, Double>("unitCost"));
         columnAmount.setCellValueFactory(new PropertyValueFactory<Product, Integer>("amount"));
+
         tableSupplier.setItems(supplierRepo.getSupplierDataProd());
         colSupplierId.setCellValueFactory(new PropertyValueFactory<Supplier, Long>("id"));
         colSupplierName.setCellValueFactory(new PropertyValueFactory<Supplier, String>("name"));
+
         tableProductName.setItems(productNameRepo.getProductNameDataProd());
         colProductNameId.setCellValueFactory(new PropertyValueFactory<ProductName, Long>("id"));
         colProductNameName.setCellValueFactory(new PropertyValueFactory<ProductName, String>("name"));
+    }
+
+    private FilteredList<Product> getProductFilteredList(ObservableList<Product> products, TextField textField) {
+        FilteredList<Product> filteredData = getFilteredData(products, textField);
+        return filteredData;
+    }
+
+    private FilteredList<Product> getFilteredData(ObservableList<Product> products, TextField textField) {
+        FilteredList<Product> filteredData = new FilteredList<>(products, p -> true);
+
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(product -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (product.getProductName().getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }else if (product.getModel().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (product.getAmount().toString().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }else if (product.getSupplier().getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }else if (product.getUnitCost().toString().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+        return filteredData;
     }
 
     public void switchToStoragePane() {
@@ -113,19 +152,25 @@ public class UserPageController extends Controller {
     }
 
     public void delete() {
+        Product selectedItem = tableProducts.getSelectionModel().getSelectedItem();
+        if (selectedItem == null){
+            alertService.showAlert(AlertService.AlertType.VALUE_NOT_SELECTED);
+        } else {
+            Map<String, String> params = new HashMap<>();
+            params.put("id", String.valueOf(selectedItem.getId()));
+            restClient.delete(SERVER_URL + "/product/{id}", params);
+            productRepo.init();
+            tableProducts.setItems(productRepo.getProductData());
+        }
     }
 
     public void add() {
         showNewStageWindow(AddProductController.class);
     }
 
-    public void search() {
-
-    }
-
     public void update() {
         productRepo.init();
-        tableProducts.setItems(productRepo.getProductData());
+        tableProducts.setItems(getProductFilteredList(productRepo.getProductData(), textFieldSearch));
     }
 
     public void addSupplier() {
