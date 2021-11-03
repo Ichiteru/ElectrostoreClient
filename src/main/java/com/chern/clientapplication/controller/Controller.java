@@ -1,5 +1,6 @@
 package com.chern.clientapplication.controller;
 
+import com.chern.clientapplication.model.Product;
 import com.chern.clientapplication.model.User;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -58,13 +59,8 @@ public abstract  class Controller {
         return headers;
     }
 
-    protected void initRepo(){
-//        carRepo.init();
-//        userRepo.init();
-    }
-
     protected User getMyUser(){
-        User user = restClient.getForObject(SERVER_URL + "my", User.class);
+        User user = restClient.getForObject(SERVER_URL + "/user", User.class);
         return user;
     }
 
