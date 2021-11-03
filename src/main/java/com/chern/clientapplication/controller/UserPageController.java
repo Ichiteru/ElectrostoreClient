@@ -1,22 +1,22 @@
 package com.chern.clientapplication.controller;
 
-import com.chern.clientapplication.model.Product;
-import com.chern.clientapplication.model.ProductName;
-import com.chern.clientapplication.model.Sale;
-import com.chern.clientapplication.model.Supplier;
-import com.chern.clientapplication.repository.ProductNameRepo;
-import com.chern.clientapplication.repository.ProductRepo;
-import com.chern.clientapplication.repository.SaleRepo;
-import com.chern.clientapplication.repository.SupplierRepo;
+import com.chern.clientapplication.model.*;
+import com.chern.clientapplication.repository.*;
 import com.chern.clientapplication.utils.AlertService;
 import com.chern.clientapplication.utils.EmptyFieldValidationService;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +35,13 @@ import java.util.concurrent.atomic.AtomicReference;
 @FxmlView("user-page.fxml")
 public class UserPageController extends Controller {
 
+    @FXML private TableView<User> tableUsers;
+    @FXML private TableColumn<User, String> colUserName;
+    @FXML private TableColumn<User, String> colUserPassword;
+    @FXML private TableColumn<User, String> colUserRole;
+    @FXML private TextField tfUserName;
+    @FXML private ComboBox<Role> cbUserRole;
+    @FXML private TextField tfUserPassword;
     @FXML private TextField tfSalesSearch;
     @FXML private Label lbIncome;
     @FXML private TableView<Sale> tableSales;
@@ -69,9 +76,12 @@ public class UserPageController extends Controller {
     @Autowired
     private SupplierRepo supplierRepo;
     @Autowired
+    private UserRepo userRepo;
+    @Autowired
     private SaleRepo saleRepo;
     private final EmptyFieldValidationService validationService;
     private final AlertService alertService;
+    private User selectedUser;
 
     @FXML private TableView<Product> tableProducts;
     @FXML private TableColumn<Product, String> columnName;
@@ -79,6 +89,8 @@ public class UserPageController extends Controller {
     @FXML private TableColumn<Product, String> columnSupplier;
     @FXML private TableColumn<Product, Double> columnUnitCost;
     @FXML private TableColumn<Product, Integer> columnAmount;
+    @FXML
+    private Pane paneAdmin;
     @FXML
     private Pane paneSales;
     @FXML
@@ -89,10 +101,10 @@ public class UserPageController extends Controller {
     private StackPane paneContainer;
 
     public void initialize(){
-        productRepo.init();
-        productNameRepo.init();
-        supplierRepo.init();
-        saleRepo.init();
+        selectedUser = new User();
+        paneContainer.getChildren().clear();
+        paneContainer.getChildren().add(paneStorage);
+        initRepo();
         FilteredList<Product> filteredProductData = getProductFilteredList(productRepo.getProductData(), textFieldSearch);
         tableProducts.setItems(filteredProductData);
         FilteredList<Sale> filteredSaleData = getSaleFilteredList(saleRepo.getSaleDataProd(), tfSalesSearch);
@@ -111,6 +123,24 @@ public class UserPageController extends Controller {
         colProductNameId.setCellValueFactory(new PropertyValueFactory<ProductName, Long>("id"));
         colProductNameName.setCellValueFactory(new PropertyValueFactory<ProductName, String>("name"));
 
+        cbUserRole.setItems(FXCollections.observableArrayList(Role.USER, Role.ADMIN));
+        tableUsers.setItems(userRepo.getUserDataProd());
+        colUserName.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
+        colUserPassword.setCellValueFactory(new PropertyValueFactory<User, String>("password"));
+        colUserRole.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getRole().toString()));
+        tableUsers.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<User>() {
+            @Override
+            public void changed(ObservableValue<? extends User> observableValue, User user, User newValue) {
+                if (newValue == null)
+                    newValue = selectedUser;
+                selectedUser = newValue;
+                System.out.println(newValue);
+                tfUserName.setText(newValue.getUsername());
+                tfUserPassword.setText(newValue.getPassword());
+                cbUserRole.setValue(newValue.getRole());
+            }
+        });
+
         colProductName.setCellValueFactory(new PropertyValueFactory<Sale, String>("productName"));
         colModel.setCellValueFactory(new PropertyValueFactory<Sale, String>("productModel"));
         colTotalAmount.setCellValueFactory(new PropertyValueFactory<Sale, Integer>("saleAmount"));
@@ -119,6 +149,14 @@ public class UserPageController extends Controller {
         colDate.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getDate().toString()));
         lbIncome.setText(String.valueOf(getTotalIncome()) + " $");
 
+    }
+
+    private void initRepo() {
+            productRepo.init();
+            productNameRepo.init();
+            supplierRepo.init();
+            saleRepo.init();
+            userRepo.init();
     }
 
     private FilteredList<Product> getProductFilteredList(ObservableList<Product> products, TextField textField) {
@@ -203,7 +241,13 @@ public class UserPageController extends Controller {
     }
 
     public void switchToAdminPane() {
-
+        if (getMyUser().getRole().equals(Role.ADMIN)){
+            paneContainer.getChildren().clear();
+            paneContainer.getChildren().add(paneAdmin);
+        }
+        else {
+            alertService.showAlert(AlertService.AlertType.NO_ACCESS_USER);
+        }
     }
 
     public void edit() {
@@ -301,9 +345,6 @@ public class UserPageController extends Controller {
         }
     }
 
-    public void salesSearch() {
-    }
-
     public Double getTotalIncome(){
         AtomicReference<Double> income = new AtomicReference<>(0.0);
         tableSales.getItems().forEach(sale -> {
@@ -319,9 +360,42 @@ public class UserPageController extends Controller {
         } else alertService.showAlert(AlertService.AlertType.VALUE_NOT_SELECTED);
     }
 
-    public void updateSales(ActionEvent actionEvent) {
+    public void updateSales() {
         saleRepo.init();
         tableSales.setItems(getSaleFilteredList(saleRepo.getSaleDataProd(), textFieldSearch));
         lbIncome.setText(String.valueOf(getTotalIncome()) + " $");
+    }
+
+    public void addOrEditUser() {
+        if (validationService.isEmpty(tfUserName) || validationService.isEmpty(tfUserPassword)
+        || validationService.isEmpty(cbUserRole)){
+            alertService.showAlert(AlertService.AlertType.SOME_FIELD_IS_EMPTY);
+        } else {
+            User user = new User(tfUserName.getText(), tfUserPassword.getText(), cbUserRole.getValue());
+            if (selectedUser.getUsername().equals(user.getUsername())){
+                user.setId(selectedUser.getId());
+                restClient.put(SERVER_URL + "/user", user);
+            } else {
+                restClient.postForObject(SERVER_URL + "/user", user, Boolean.class);
+            }
+        }
+    }
+
+    public void deleteUser() {
+        if (tableUsers.getSelectionModel().getSelectedItem() != null){
+            User user = tableUsers.getSelectionModel().getSelectedItem();
+            Map<String,String> params = new HashMap<>();
+            params.put("id", String.valueOf(user.getId()));
+            restClient.delete(SERVER_URL + "/user/{id}", params);
+            tableUsers.getItems().remove(user);
+            tableUsers.refresh();
+        } else {
+            alertService.showAlert(AlertService.AlertType.VALUE_NOT_SELECTED);
+        }
+    }
+
+    public void updateUsers() {
+        userRepo.init();
+        tableUsers.setItems(userRepo.getUserDataProd());
     }
 }
