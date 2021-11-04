@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -27,14 +28,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @FxmlView("user-page.fxml")
 public class UserPageController extends Controller {
 
+    @FXML private Label lbCaption;
+    @FXML private PieChart chartPie;
     @FXML private TableView<User> tableUsers;
     @FXML private TableColumn<User, String> colUserName;
     @FXML private TableColumn<User, String> colUserPassword;
@@ -98,6 +104,8 @@ public class UserPageController extends Controller {
     @FXML
     private Pane paneStorage;
     @FXML
+    private Pane paneChart;
+    @FXML
     private StackPane paneContainer;
 
     public void initialize(){
@@ -147,8 +155,9 @@ public class UserPageController extends Controller {
         colTotalCost.setCellValueFactory(new PropertyValueFactory<Sale, Double>("totalCost"));
         colDealerName.setCellValueFactory(new PropertyValueFactory<Sale, String>("dealerName"));
         colDate.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getDate().toString()));
-        lbIncome.setText(String.valueOf(getTotalIncome()) + " $");
+        lbIncome.setText(String.format("%.2f BYN", getTotalIncome()));
 
+        setChartPieParams();
     }
 
     private void initRepo() {
@@ -238,6 +247,12 @@ public class UserPageController extends Controller {
     public void switchToSalesPane() {
         paneContainer.getChildren().clear();
         paneContainer.getChildren().add(paneSales);
+    }
+
+
+    public void switchToChartPane() {
+        paneContainer.getChildren().clear();
+        paneContainer.getChildren().add(paneChart);
     }
 
     public void switchToAdminPane() {
@@ -363,7 +378,8 @@ public class UserPageController extends Controller {
     public void updateSales() {
         saleRepo.init();
         tableSales.setItems(getSaleFilteredList(saleRepo.getSaleDataProd(), textFieldSearch));
-        lbIncome.setText(String.valueOf(getTotalIncome()) + " $");
+        lbIncome.setText(String.format("%.2f BYN", getTotalIncome()));
+        setChartPieParams();
     }
 
     public void addOrEditUser() {
@@ -397,5 +413,25 @@ public class UserPageController extends Controller {
     public void updateUsers() {
         userRepo.init();
         tableUsers.setItems(userRepo.getUserDataProd());
+    }
+
+    private void setChartPieParams(){
+        chartPie.getData().clear();
+        saleRepo.init();
+        ObservableList<Sale> sales = saleRepo.getSaleDataProd();
+        Map<String, List<Sale>> map = sales.stream().collect(Collectors.groupingBy(sale -> sale.getProductName()));
+        map.forEach((key,value) ->{
+            double sum = value.stream().mapToDouble(v -> v.getTotalCost()).sum();
+            PieChart.Data data = new PieChart.Data(key, sum);
+            chartPie.getData().add(data);
+        });
+        chartPie.getData().forEach(data -> data.getNode().setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                lbCaption.setTranslateX(mouseEvent.getSceneX());
+                lbCaption.setTranslateY(mouseEvent.getSceneY());
+                lbCaption.setText(String.valueOf(data.getPieValue()) + "lalala");
+            }
+        }));
     }
 }
