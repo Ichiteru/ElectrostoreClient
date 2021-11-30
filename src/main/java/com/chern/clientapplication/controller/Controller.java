@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 public abstract  class Controller {
 
-    protected final static String SERVER_URL = "http://localhost:8083/";
+    protected final static String SERVER_URL = "http://localhost:8085/";
     protected final static String TITLE = "Новое окно";
 
     @Autowired

@@ -7,8 +7,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
@@ -59,69 +57,6 @@
       </VBox>
       <StackPane fx:id="paneContainer" layoutX="234.0" prefHeight="451.0" prefWidth="656.0">
          <children>
-            <Pane fx:id="paneSuppliers" prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <AnchorPane prefHeight="451.0" prefWidth="656.0" style="-fx-background-color: #8d9cb5;">
-                     <children>
-                        <TableView fx:id="tableSupplier" layoutX="14.0" layoutY="14.0" prefHeight="352.0" prefWidth="234.0" style="-fx-background-color: gray; -fx-border-color: white; -fx-border-radius: 5; -fx-background-radius: 5;">
-                          <columns>
-                            <TableColumn fx:id="colSupplierId" prefWidth="75.19999694824219" text="Номер" />
-                            <TableColumn fx:id="colSupplierName" prefWidth="159.20001220703125" text="Название поставщика" />
-                          </columns>
-                        </TableView>
-                        <TextField fx:id="tfSupplierName" layoutX="14.0" layoutY="380.0" prefHeight="40.0" prefWidth="140.0" promptText="Имя поставщика" style="-fx-background-color: gray;">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                        </TextField>
-                        <Button fx:id="buttonAddSupplier" layoutX="149.0" layoutY="378.0" mnemonicParsing="false" onAction="#addSupplier" prefHeight="43.0" prefWidth="40.0" style="-fx-background-color: none;">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="39.0">
-                                 <image>
-                                    <Image url="@../../../../../../../../../add_icon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic></Button>
-                        <TableView fx:id="tableProductName" layoutX="407.0" layoutY="14.0" prefHeight="352.0" prefWidth="234.0" style="-fx-background-color: gray; -fx-border-color: white; -fx-border-radius: 5; -fx-background-radius: 5;">
-                           <columns>
-                              <TableColumn fx:id="colProductNameId" prefWidth="75.19999694824219" text="Номер" />
-                              <TableColumn fx:id="colProductNameName" prefWidth="159.20001220703125" text="Тип продукта" />
-                           </columns>
-                        </TableView>
-                        <Button fx:id="buttonDeleteSupplier" layoutX="192.0" layoutY="375.0" mnemonicParsing="false" onAction="#deleteSupplier" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: none;">
-                           <graphic>
-                              <ImageView fitHeight="39.0" fitWidth="40.0">
-                                 <image>
-                                    <Image url="@../../../../img/delete_icon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic></Button>
-                        <Button fx:id="buttonAddProductName" layoutX="542.0" layoutY="378.0" mnemonicParsing="false" onAction="#addProductName" prefHeight="43.0" prefWidth="40.0" style="-fx-background-color: none;">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="39.0">
-                                 <image>
-                                    <Image url="@../../../../../../../../../add_icon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic></Button>
-                        <TextField fx:id="tfProductName" layoutX="407.0" layoutY="379.0" prefHeight="40.0" prefWidth="140.0" promptText="Тип продукта" style="-fx-background-color: gray;">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                        </TextField>
-                        <Button fx:id="buttonDeleteProductName" layoutX="586.0" layoutY="376.0" mnemonicParsing="false" onAction="#deleteProductName" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: none;">
-                           <graphic>
-                              <ImageView fitHeight="39.0" fitWidth="40.0">
-                                 <image>
-                                    <Image url="@../../../../img/delete_icon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </AnchorPane>
-               </children>
-            </Pane>
             <Pane fx:id="paneSales" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <AnchorPane prefHeight="451.0" prefWidth="656.0" style="-fx-background-color: #8d9cb5;">
@@ -247,6 +182,53 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Button>
+               </children>
+            </Pane>
+            <Pane fx:id="paneSuppliers" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <AnchorPane prefHeight="451.0" prefWidth="656.0" style="-fx-background-color: #8d9cb5;">
+                     <children>
+                        <TableView fx:id="tableSupplier" layoutX="14.0" layoutY="14.0" prefHeight="352.0" prefWidth="250.0" style="-fx-background-color: gray; -fx-border-color: white; -fx-border-radius: 5; -fx-background-radius: 5;">
+                          <columns>
+                            <TableColumn fx:id="colSupplierId" prefWidth="75.19999694824219" text="Номер" />
+                            <TableColumn fx:id="colSupplierName" prefWidth="159.20001220703125" text="Название поставщика" />
+                          </columns>
+                        </TableView>
+                        <TextField fx:id="tfSupplierName" layoutX="14.0" layoutY="380.0" prefHeight="40.0" prefWidth="140.0" promptText="Имя поставщика" style="-fx-background-color: gray;">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </TextField>
+                        <Button fx:id="buttonAddSupplier" layoutX="166.0" layoutY="380.0" mnemonicParsing="false" onAction="#addSupplier" prefHeight="31.0" prefWidth="42.0" text="+">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Button>
+                        <TableView fx:id="tableProductName" layoutX="391.0" layoutY="14.0" prefHeight="352.0" prefWidth="250.0" style="-fx-background-color: gray; -fx-border-color: white; -fx-border-radius: 5; -fx-background-radius: 5;">
+                           <columns>
+                              <TableColumn fx:id="colProductNameId" prefWidth="75.19999694824219" text="Номер" />
+                              <TableColumn fx:id="colProductNameName" prefWidth="159.20001220703125" text="Тип продукта" />
+                           </columns>
+                        </TableView>
+                        <Button fx:id="buttonDeleteSupplier" layoutX="224.0" layoutY="380.0" mnemonicParsing="false" onAction="#deleteSupplier" prefHeight="40.0" prefWidth="40.0" text="-">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font></Button>
+                        <Button fx:id="buttonAddProductName" layoutX="545.0" layoutY="380.0" mnemonicParsing="false" onAction="#addProductName" prefHeight="31.0" prefWidth="40.0" text="+">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Button>
+                        <TextField fx:id="tfProductName" layoutX="391.0" layoutY="380.0" prefHeight="40.0" prefWidth="140.0" promptText="Тип продукта" style="-fx-background-color: gray;">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </TextField>
+                        <Button fx:id="buttonDeleteProductName" layoutX="601.0" layoutY="380.0" mnemonicParsing="false" onAction="#deleteProductName" prefHeight="40.0" prefWidth="40.0" text="-">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
                </children>
             </Pane>
          </children>

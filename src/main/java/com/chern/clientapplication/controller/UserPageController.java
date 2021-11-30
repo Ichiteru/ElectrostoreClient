@@ -10,6 +10,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -116,13 +117,13 @@ public class UserPageController extends Controller {
         FilteredList<Product> filteredProductData = getProductFilteredList(productRepo.getProductData(), textFieldSearch);
         tableProducts.setItems(filteredProductData);
         FilteredList<Sale> filteredSaleData = getSaleFilteredList(saleRepo.getSaleDataProd(), tfSalesSearch);
-        tableSales.setItems(filteredSaleData);
+//        tableSales.setItems(filteredSaleData);
+        tableSales.setItems(getSortedList(filteredSaleData, tableSales));
         columnName.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getProductName().getName()));
         columnModel.setCellValueFactory(new PropertyValueFactory<Product, String>("model"));
         columnSupplier.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getSupplier().getName()));
         columnUnitCost.setCellValueFactory(new PropertyValueFactory<Product, Double>("unitCost"));
         columnAmount.setCellValueFactory(new PropertyValueFactory<Product, Integer>("amount"));
-
         tableSupplier.setItems(supplierRepo.getSupplierDataProd());
         colSupplierId.setCellValueFactory(new PropertyValueFactory<Supplier, Long>("id"));
         colSupplierName.setCellValueFactory(new PropertyValueFactory<Supplier, String>("name"));
@@ -145,6 +146,7 @@ public class UserPageController extends Controller {
                 System.out.println(newValue);
                 tfUserName.setText(newValue.getUsername());
                 tfUserPassword.setText(newValue.getPassword());
+                tfUserPassword.setText(newValue.getPassword());
                 cbUserRole.setValue(newValue.getRole());
             }
         });
@@ -166,6 +168,12 @@ public class UserPageController extends Controller {
             supplierRepo.init();
             saleRepo.init();
             userRepo.init();
+    }
+
+    protected <T> SortedList<T> getSortedList(FilteredList<T> filteredData, TableView<T> table) {
+        SortedList<T> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(table.comparatorProperty());
+        return sortedData;
     }
 
     private FilteredList<Product> getProductFilteredList(ObservableList<Product> products, TextField textField) {
@@ -377,7 +385,7 @@ public class UserPageController extends Controller {
 
     public void updateSales() {
         saleRepo.init();
-        tableSales.setItems(getSaleFilteredList(saleRepo.getSaleDataProd(), textFieldSearch));
+        tableSales.setItems(getSaleFilteredList(saleRepo.getSaleDataProd(), tfSalesSearch));
         lbIncome.setText(String.format("%.2f BYN", getTotalIncome()));
         setChartPieParams();
     }

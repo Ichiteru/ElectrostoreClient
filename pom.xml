@@ -11,6 +11,7 @@
     <groupId>com.chern</groupId>
     <artifactId>ClientApplication</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+<!--    <packaging>jar</packaging>-->
     <name>ClientApplication</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -57,6 +58,21 @@
                     </excludes>
                 </configuration>
             </plugin>
+<!--            <plugin>-->
+<!--                &lt;!&ndash; Build an executable JAR &ndash;&gt;-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-jar-plugin</artifactId>-->
+<!--                <version>3.2.0</version>-->
+<!--                <configuration>-->
+<!--                    <archive>-->
+<!--                        <manifest>-->
+<!--                            <addClasspath>true</addClasspath>-->
+<!--                            <classpathPrefix>lib/</classpathPrefix>-->
+<!--                            <mainClass>com.chern.clientapplication.ClientApplication</mainClass>-->
+<!--                        </manifest>-->
+<!--                    </archive>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 

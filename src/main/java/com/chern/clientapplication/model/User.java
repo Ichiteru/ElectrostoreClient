@@ -3,9 +3,11 @@ package com.chern.clientapplication.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @Data
-public class User {
+public class User implements Serializable {
 
     private Long id;
     private String username;

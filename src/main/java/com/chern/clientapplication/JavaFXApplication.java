@@ -32,7 +32,6 @@ public class JavaFXApplication extends Application {
         stage.setScene(scene);
         stage.show();
         Controller.primaryStage = stage;
-//        applicationContext.getBean(LoginController.class).setStage(stage);
     }
 
     @Override
